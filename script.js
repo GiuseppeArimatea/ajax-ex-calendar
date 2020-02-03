@@ -1,4 +1,10 @@
 $(document).ready(function () {
+  moment.updateLocale('it', {
+      months : [
+          "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio",
+          "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
+      ]
+  });
   var gennaio = moment("2018-01-01");
   var giorniGennaio = moment(2018-01).daysInMonth(); // prendiamo i giorni di gennaio
 
