@@ -5,53 +5,87 @@ $(document).ready(function () {
           "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
       ]
   });
-  var gennaio = moment("2018-01-01");
-  var giorniGennaio = moment(2018-01).daysInMonth(); // prendiamo i giorni di gennaio
 
-  Mese(giorniGennaio,gennaio) //invochiamo la funzione mese
+  var questoMese = 0;
+  var anno = 2018;
+  var baseMese = moment(
+    {
+      anno: anno,
+      mese: questoMese,
+    }
+  );
+
+  numeroGiorni(baseMese);
+  printFestivita(baseMese);
+});
 
 
 
-// Chiamiamo l' API, prendiamo i giorni di festa tramite un for...gli aggiungiamo una classe red e li stampiamo tramite handlebars.
-  $.ajax({
+// --------------FUNZIONI---------------
+
+
+
+function printFestivita(mese) {
+  $.ajax(
+    {
     url : "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=0",
     method : "GET",
+    data : {
+      year: mese.year(),
+      mese: mese.month()
+    },
     success : function (data) {
-      for (var i = 0; i < data.response.length; i++) {
-        $(".wrapper div").each(function () {
-          if ($(this).attr("data") == data.response[i].date) {
+      var feste = data.response;
+      for (var i = 0; i < feste.length; i++) {
+        var questeFeste = feste[i];
+        var questeFesteDate = questeFeste.date;
+        $(".giorni").each(function () {
+          var elementoData = $(this).attr("data");
+          if (questeFesteDate == elementoData) {
             $(this).addClass("red");
-            var source = $("#entry-template").html();
-            var template = Handlebars.compile(source);
-            var context = {
-              name : data.response[i].name,
-            }
-            var html = template(context);
-            $(this).append(html)
-          };
-        })
+            $(this).find("data").append(questeFeste.name);
+          }
+        });
       }
     },
     erorr : function (richiesta,stato,errore) {
       alert("errore" + errore)
     }
   });
+}
+
+$('.prev').click(function() {
+  var questoMese = $('h1').attr('data-this-month', );
+  var date = moment(questoMese).subtract(1, 'months');
 });
 
+$('.next').click(function() {
+  var questoMese = $('h1').attr('data-this-month');
+  var date = moment(questoMese).add(1, 'months');
+});
+
+
+
+
+
 // cicliamo il numero dei giorni e tramite handlebars li aggiungiamo al nostro html
-function Mese(giorni,mese) {
-  for (var i = 0; i < giorni; i++) {
+function numeroGiorni(baseMese) {
+  for (var i = 0; i < 31; i++) {
     var source = $("#entry-template").html();
     var template = Handlebars.compile(source);
     var context = {
-      giorno: parseInt(mese.format("D")) + i,
-      mese: mese.format("MMMM"),
-      data : mese.format("YYYY"+"-"+"MM") + "-" + addZero((parseInt(mese.format("D")) + i)) ,
+      giorno : 1,
+      mese: baseMese.format('MMMM'),
+      dataCompleta: baseMese.format('YYYY-MM') + '-' + addZero(i)
     };
     var html = template(context);
-    $(".wrapper").append(html);
+    $('wrapper').append(html);
   }
 }
+
+
+
+
 // aggiungo zero
 function addZero(num) {
   if (num < 10) {
