@@ -68,14 +68,14 @@ function printFestivita(mese) {
 
 
 // cicliamo il numero dei giorni e tramite handlebars li aggiungiamo al nostro html
-function numeroGiorni(moth) {
+function numeroGiorni(mese) {
   for (var i = 1 ; i < 31; i++) {
     var source = $("#entry-template").html();
     var template = Handlebars.compile(source);
     var context = {
       giorno : i,
-      mese: month.format('MMMM'),
-      dataCompleta: month.format('YYYY-MM') + '-' + addZero(i)
+      mese: mese.format('MMMM'),
+      dataCompleta: mese.format('YYYY-MM') + '-' + addZero(i)
     };
     var html = template(context);
     $('.wrapper').append(html);
