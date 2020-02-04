@@ -10,8 +10,8 @@ $(document).ready(function () {
   var anno = 2018;
   var baseMese = moment(
     {
-      anno: anno,
-      mese: questoMese,
+      year: anno,
+      month: questoMese
     }
   );
 
@@ -39,20 +39,19 @@ function printFestivita(mese) {
       for (var i = 0; i < feste.length; i++) {
         var questeFeste = feste[i];
         var questeFesteDate = questeFeste.date;
-        $(".giorni").each(function () {
-          var elementoData = $(this).attr("data");
-          if (questeFesteDate == elementoData) {
-            $(this).addClass("red");
-            $(this).find("data").append(questeFeste.name);
-          }
-        });
+        $('li[data="'+ questeFesteDate +'"]').addClass('red');
+        $('li[data="'+ questeFesteDate +'"]').find('.festivita').append(questeFeste.name);
       }
     },
     erorr : function (richiesta,stato,errore) {
       alert("errore" + errore)
     }
   });
-}
+};
+
+
+
+
 
 // $('.prev').click(function() {
 //   var questoMese = $('h1').attr('data-this-month', );
@@ -69,17 +68,17 @@ function printFestivita(mese) {
 
 
 // cicliamo il numero dei giorni e tramite handlebars li aggiungiamo al nostro html
-function numeroGiorni(baseMese) {
-  for (var i = 0; i < 31; i++) {
+function numeroGiorni(moth) {
+  for (var i = 1 ; i < 31; i++) {
     var source = $("#entry-template").html();
     var template = Handlebars.compile(source);
     var context = {
-      giorno : 1,
-      mese: baseMese.format('MMMM'),
-      dataCompleta: baseMese.format('YYYY-MM') + '-' + addZero(i)
+      giorno : i,
+      mese: month.format('MMMM'),
+      dataCompleta: month.format('YYYY-MM') + '-' + addZero(i)
     };
     var html = template(context);
-    $('wrapper').append(html);
+    $('.wrapper').append(html);
   }
 }
 
