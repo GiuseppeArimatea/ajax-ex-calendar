@@ -1,10 +1,5 @@
 $(document).ready(function () {
-  moment.updateLocale('it', {
-      months : [
-          "Gennaio", "Febbraio", "Marzo", "Aprile", "Maggio", "Giugno", "Luglio",
-          "Agosto", "Settembre", "Ottobre", "Novembre", "Dicembre"
-      ]
-  });
+
 
   var questoMese = 0;
   var anno = 2018;
@@ -15,7 +10,7 @@ $(document).ready(function () {
     }
   );
 
-  numeroGiorni(baseMese);
+  stampaGiorni(baseMese);
   printFestivita(baseMese);
 });
 
@@ -26,21 +21,23 @@ $(document).ready(function () {
 
 
 function printFestivita(mese) {
+  console.log(mese);
   $.ajax(
     {
-    url : "https://flynn.boolean.careers/exercises/api/holidays?year=2018&month=0",
+    url : "https://flynn.boolean.careers/exercises/api/holidays",
     method : "GET",
     data : {
       year: mese.year(),
-      mese: mese.month()
+      month: mese.month()
     },
     success : function (data) {
+      console.log(data);
       var feste = data.response;
       for (var i = 0; i < feste.length; i++) {
         var questeFeste = feste[i];
         var questeFesteDate = questeFeste.date;
-        $('li[data="'+ questeFesteDate +'"]').addClass('red');
-        $('li[data="'+ questeFesteDate +'"]').find('.festivita').append(questeFeste.name);
+        $('li[data-complete-date="'+ questeFesteDate +'"]').addClass('red');
+        $('li[data-complete-date="'+ questeFesteDate +'"]').find('.festivita').append(questeFeste.name);
       }
     },
     erorr : function (richiesta,stato,errore) {
@@ -50,32 +47,37 @@ function printFestivita(mese) {
 };
 
 
+$('.prev').click(function() {
+  var questoMese = $('h1').attr('data-this-month');
+  var date = moment(questoMese).subtract(1, 'months');
+  stampaGiorni(date);
+  printFestivita(date);
+});
 
 
+$('.next').click(function() {
+  var questoMese = $('h1').attr('data-this-month');
+  var date = moment(questoMese).add(1, 'months');
+  stampaGiorni(date);
+  printFestivita(date);
+});
 
-// $('.prev').click(function() {
-//   var questoMese = $('h1').attr('data-this-month', );
-//   var date = moment(questoMese).subtract(1, 'months');
-// });
-//
-// $('.next').click(function() {
-//   var questoMese = $('h1').attr('data-this-month');
-//   var date = moment(questoMese).add(1, 'months');
-// });
-//
-//
 
 
 
 // cicliamo il numero dei giorni e tramite handlebars li aggiungiamo al nostro html
-function numeroGiorni(mese) {
-  for (var i = 1 ; i < 31; i++) {
+function stampaGiorni(mese) {
+  $('h1').text(mese.format('MMMM-YYYY'));
+  $('h1').attr('data-this-month',mese.format('YYYY-MM'));
+  $('.wrapper').html('');
+  var daysInMonth = mese.daysInMonth();
+  for (var i = 1 ; i <= daysInMonth; i++) {
     var source = $("#entry-template").html();
     var template = Handlebars.compile(source);
     var context = {
       giorno : i,
       mese: mese.format('MMMM'),
-      dataCompleta: mese.format('YYYY-MM') + '-' + addZero(i)
+      data: mese.format('YYYY-MM') + '-' + addZero(i)
     };
     var html = template(context);
     $('.wrapper').append(html);
