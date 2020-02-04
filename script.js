@@ -54,17 +54,17 @@ function printFestivita(mese) {
   });
 }
 
-$('.prev').click(function() {
-  var questoMese = $('h1').attr('data-this-month', );
-  var date = moment(questoMese).subtract(1, 'months');
-});
-
-$('.next').click(function() {
-  var questoMese = $('h1').attr('data-this-month');
-  var date = moment(questoMese).add(1, 'months');
-});
-
-
+// $('.prev').click(function() {
+//   var questoMese = $('h1').attr('data-this-month', );
+//   var date = moment(questoMese).subtract(1, 'months');
+// });
+//
+// $('.next').click(function() {
+//   var questoMese = $('h1').attr('data-this-month');
+//   var date = moment(questoMese).add(1, 'months');
+// });
+//
+//
 
 
 
